@@ -5,6 +5,9 @@ import (
 	"fmt"
 	"math/rand"
 	"os"
+	"time"
+
+	"github.com/adhocore/chin"
 )
 
 var errInvalidSides = fmt.Errorf("sides must be >= 2")
@@ -38,9 +41,24 @@ func main() {
 	flag.Parse()
 
 	result, err := rollMany(*amount, *sides)
+	_ = result
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	fmt.Println(result)
+
+	s := chin.New()
+	go s.Start()
+
+	for i, r := range result {
+		if i == 0 {
+			time.Sleep(3 * time.Second)
+		} else {
+			time.Sleep(2 * time.Second)
+		}
+		fmt.Printf("%d ", r)
+	}
+	fmt.Println()
+
+	s.Stop()
 }
